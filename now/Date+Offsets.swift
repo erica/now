@@ -18,7 +18,7 @@ extension Date {
         // provides hour and minute offsets from midnight.
         let dateFormatter = DateFormatter()
         var date: Date?
-        for format in ["h:ma", "ha", "H:m", "Hm", "HHmm"] {
+        for format in ["h:ma", "ha", "H:m", "HH", "Hm", "HHmm"] {
             dateFormatter.dateFormat = format
             if let parsed = dateFormatter.date(from: string) {
                 date = parsed
