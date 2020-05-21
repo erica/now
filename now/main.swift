@@ -42,10 +42,9 @@ struct Now: ParsableCommand {
 
         let hint = locationInfo.joined(separator: " ")
         let date: Date
-        switch at ?? when {
-        case let timeSpecifier?:
+        if case .some(let timeSpecifier) = (at ?? when) {
             date = try Date.date(from: timeSpecifier)
-        default:
+        } else {
             date = Date()
         }
         try PlaceFinder.showTime(from: hint, date: date, castingTimeToLocal: when != nil)

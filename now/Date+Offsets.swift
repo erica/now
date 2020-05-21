@@ -41,7 +41,7 @@ extension Date {
         
         // Calculate the target date by starting with the time representing "now",
         // replacing the hour and minute components to represent a time for "today"
-        var targetDate = Date()
+        var targetDate = Date(timeIntervalSinceReferenceDate: 24 * 60 * 60)
         
         guard
             let newDateWithHour = NSCalendar.autoupdatingCurrent
