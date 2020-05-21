@@ -40,7 +40,7 @@ Local 1:30:00 PM (MDT Mountain Time)
 
 ## Dependencies
 
-* [Swift Argument Parser](https://github.com/apple/SwiftArgumentParser)
+* [Swift-Argument-Parser](https://github.com/apple/Swift-Argument-Parser)
 
 ## Building
 

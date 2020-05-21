@@ -26,7 +26,8 @@ extension Date {
             }
         }
         
-        guard let componentDate = date
+        guard
+            let componentDate = date
             else { throw RuntimeError("Unable to parse hours and minutes from time string.") }
         
         let components = NSCalendar.autoupdatingCurrent
@@ -40,13 +41,15 @@ extension Date {
         // replacing the hour and minute components to represent a time for "today"
         var targetDate = Date()
         
-        guard let newDateWithHour = NSCalendar.autoupdatingCurrent
-            .date(bySetting: .hour, value: hourComponent, of: targetDate)
+        guard
+            let newDateWithHour = NSCalendar.autoupdatingCurrent
+                .date(bySetting: .hour, value: hourComponent, of: targetDate)
             else { throw RuntimeError("Failed to set target hour.") }
         targetDate = newDateWithHour
         
-        guard let newDateWithMinute = NSCalendar.autoupdatingCurrent
-            .date(bySetting: .minute, value: minuteComponent, of: targetDate)
+        guard
+            let newDateWithMinute = NSCalendar.autoupdatingCurrent
+                .date(bySetting: .minute, value: minuteComponent, of: targetDate)
             else { throw RuntimeError("Failed to set target minute.") }
         targetDate = newDateWithMinute
         

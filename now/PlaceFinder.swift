@@ -8,54 +8,68 @@ enum PlaceFinder {
     /// - Throws: `RuntimeError` if the location is not found
     /// - Returns: A `CLPlacemark` matching the text hint
     static func fetchPlaceMark(from hint: String) throws -> CLPlacemark {
-        var _placemarks: [CLPlacemark]?
-        var _error: Error?
+        var result: Result<[CLPlacemark], Error>?
         
-        CLGeocoder().geocodeAddressString(hint) { __placemarks, __error in
-            (_placemarks, _error) = (__placemarks, __error)
+        CLGeocoder().geocodeAddressString(hint) { placemarks, error in
+            switch (placemarks, error) {
+            case (_, let error?):
+                result = .failure(error)
+            case (let placemarks?, _):
+                result = .success(placemarks)
+            default:
+                fatalError("Geocoder error, no results.")
+            }
             CFRunLoopStop(CFRunLoopGetCurrent())
         }
         CFRunLoopRun()
-
-        if let error = _error { throw error }
+        
         guard
-            let placemarks = _placemarks,
-            !placemarks.isEmpty
-            else { throw RuntimeError("Locations not found") }
-        return placemarks[0]
+            let result_ = result
+            else { throw RuntimeError("Unable to fetch location information") }
+        
+        switch result_ {
+        case .failure(let error):
+            throw error
+        case .success(let placemarks):
+            guard
+                !placemarks.isEmpty
+                else { throw RuntimeError("Unable to fetch location information") }
+            return placemarks[0]
+        }
     }
     
     /// Display a user-localized time (medium style) for a timezone described by freeform text
     /// - Parameters:
     ///   - hint: A free-form location indicator, such as a city name, zip code, place of interest.
     ///   - date: An absolute date that will be adjusted to a timezone, localized to the user, and printed.
+    ///   - castLocal: Look up the remote time and cast it to the local zone
     /// - Throws: A `RuntimeError` if the target timezone cannot be interpreted.
-    static func showTime(from hint: String, date: Date = Date(), reverse: Bool = false) throws {
+    static func showTime(from hint: String, date: Date = Date(), castingTimeToLocal castLocal: Bool = false) throws {
         let placemark = try fetchPlaceMark(from: hint)
-        guard let timeZone = placemark.timeZone
+        guard
+            let timeZone = placemark.timeZone
             else { throw RuntimeError("Timezone not retrieved") }
         
         var date = date
-        if reverse {
+        if castLocal {
             let ourseconds = Locale.autoupdatingCurrent.calendar.timeZone.secondsFromGMT()
             guard
                 let theirseconds = placemark.timeZone?.secondsFromGMT(),
-                let reverseDate = Calendar.autoupdatingCurrent.date(byAdding: .second, value: ourseconds - theirseconds, to: date) else {
-                throw RuntimeError("Inexplicable time zone conversion fail. Sorry.")
-            }
+                let reverseDate = Calendar.autoupdatingCurrent.date(byAdding: .second, value: ourseconds - theirseconds, to: date)
+                else { throw RuntimeError("Inexplicable time zone conversion fail. Sorry.") }
             date = reverseDate
         }
         
         let formatter = DateFormatter()
         formatter.timeStyle = .medium
-        if !reverse { formatter.timeZone = timeZone }
+        if !castLocal { formatter.timeZone = timeZone }
         let stringDate = formatter.string(from: date)
         
         let timezoneFormatter = DateFormatter()
         timezoneFormatter.dateFormat = " (z vvvv)"
-        if !reverse { timezoneFormatter.timeZone = timeZone }
+        if !castLocal { timezoneFormatter.timeZone = timeZone }
 
-        if !reverse, let name = placemark.name { print("\(name) ", terminator: "") }
+        if !castLocal, let name = placemark.name { print("\(name) ", terminator: "") }
         else { print("Local ", terminator: "") }
         
         print(stringDate, terminator: "")

@@ -1,0 +1,2 @@
+#! /bin/csh
+cp .build/debug/now /usr/local/bin/now

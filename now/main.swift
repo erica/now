@@ -30,23 +30,23 @@ struct Now: ParsableCommand {
     var locationInfo: [String]
 
     func run() throws {
-        guard CommandLine.argc > 1 else {
-            throw CleanExit.helpRequest()
-        }
+        guard
+            CommandLine.argc > 1
+            else { throw CleanExit.helpRequest() }
         
-        guard at == nil || when == nil else {
-            throw RuntimeError("Cannot specify both --at and --when. Pick one.")
-        }
+        guard
+            at == nil || when == nil
+            else { throw RuntimeError("Cannot specify both --at and --when. Pick one.") }
 
         let hint = locationInfo.joined(separator: " ")
-        var date = Date()
-        if let at = at {
-            date = try Date.date(from: at)
+        let date: Date
+        switch at ?? when {
+        case let timeSpecifier?:
+            date = try Date.date(from: timeSpecifier)
+        default:
+            date = Date()
         }
-        if let when = when {
-            date = try Date.date(from: when)
-        }
-        try PlaceFinder.showTime(from: hint, date: date, reverse: when != nil)
+        try PlaceFinder.showTime(from: hint, date: date, castingTimeToLocal: when != nil)
     }    
 }
 
