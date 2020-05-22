@@ -38,7 +38,7 @@ struct Now: ParsableCommand {
         
         guard
             at == nil || when == nil
-            else { throw RuntimeError("Cannot specify both --at and --when. Pick one.") }
+            else { throw RuntimeError.atWhenOverlap }
 
         let hint = locationInfo.joined(separator: " ")
         let date: Date

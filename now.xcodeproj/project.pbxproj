@@ -13,6 +13,7 @@
 		8E0CC35E2473460C008B5432 /* RuntimeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0CC35D2473460C008B5432 /* RuntimeError.swift */; };
 		8E0CC36024734614008B5432 /* Date+Offsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0CC35F24734614008B5432 /* Date+Offsets.swift */; };
 		8E0CC36224734697008B5432 /* PlaceFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0CC36124734697008B5432 /* PlaceFinder.swift */; };
+		8E10B4A92478326700597641 /* Result+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E10B4A82478326700597641 /* Result+Utility.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,7 @@
 		8E0CC35D2473460C008B5432 /* RuntimeError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RuntimeError.swift; sourceTree = "<group>"; };
 		8E0CC35F24734614008B5432 /* Date+Offsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Offsets.swift"; sourceTree = "<group>"; };
 		8E0CC36124734697008B5432 /* PlaceFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFinder.swift; sourceTree = "<group>"; };
+		8E10B4A82478326700597641 /* Result+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Utility.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				8E0CC35F24734614008B5432 /* Date+Offsets.swift */,
 				8E0CC36124734697008B5432 /* PlaceFinder.swift */,
 				8E0CC35D2473460C008B5432 /* RuntimeError.swift */,
+				8E10B4A82478326700597641 /* Result+Utility.swift */,
 			);
 			path = now;
 			sourceTree = "<group>";
@@ -105,7 +108,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Erica Sadun";
 				TargetAttributes = {
 					8E0CC34E24734428008B5432 = {
@@ -141,6 +144,7 @@
 			files = (
 				8E0CC35324734428008B5432 /* main.swift in Sources */,
 				8E0CC36024734614008B5432 /* Date+Offsets.swift in Sources */,
+				8E10B4A92478326700597641 /* Result+Utility.swift in Sources */,
 				8E0CC36224734697008B5432 /* PlaceFinder.swift in Sources */,
 				8E0CC35E2473460C008B5432 /* RuntimeError.swift in Sources */,
 			);
@@ -265,6 +269,7 @@
 		8E0CC35724734428008B5432 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2W4DVPEQ39;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -276,6 +281,7 @@
 		8E0CC35824734428008B5432 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2W4DVPEQ39;
 				ENABLE_HARDENED_RUNTIME = YES;
