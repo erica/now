@@ -7,36 +7,43 @@ I didn't intend to push this out but darn if it isn't useful.
 ## Usage
 
 ```
-% now
-OVERVIEW:
-Check the time at a given location, "now Sao Paolo Brazil".
+OVERVIEW: 
 
-Locations are diacritical and case insensitive.  Use postcodes, cities,
-states, countries, even place names like "now Lincoln Memorial"
+Check the time at a given location, "now Sao Paolo Brazil". Locations
+are diacritical and case insensitive.  Use postcodes, cities, states,
+countries, even place names like "now Lincoln Memorial"
 
-Set a reference time with `at`: "now --at 5PM Bath UK"
-Retrieve the reference time with `when`: "now --when 5PM Bath UK"
+When it's this time here: "now --local 5PM Bath UK"
+When it's that time there: "now --remote 5PM Bath UK"
 
 Valid time styles: 5PM, 5:30PM, 17:30, 1730. (No spaces.)
 
-USAGE: now [--time <time>] [--when <when>] [<location-info> ...]
+USAGE: now [--local <local>] [--remote <remote>] [<location-info> ...]
 
 ARGUMENTS:
   <location-info>
 
 OPTIONS:
-  -@, -t, --at, --time <time>
-                          At this local time 
-  --when <when>           When it's this time at that location 
+  -@, -l, --at, --here, --local <local>
+                          When it's this local time 
+  -r, --when, --there, --remote <remote>
+                          When it's this remote time 
   -h, --help              Show help information.
 
 % now sao paolo brazil
-São Paulo 10:09:43 PM (GMT-3 Brasilia Standard Time)
-% now --at 4:30PM sao paolo brazil
-São Paulo 7:30:00 PM (GMT-3 Brasilia Standard Time)
-% now --when 4:30PM sao paolo brazil
-Local 1:30:00 PM (MDT Mountain Time)
+São Paulo 3:50:58 PM (GMT-3 Brasilia Standard Time)
+% now --local 4PM sao paolo brazil
+São Paulo 9:00:00 PM (GMT-3 Brasilia Standard Time)
+% now --remote 4PM sao paolo brazil
+Local 1:00:00 PM (GMT-3 Brasilia Standard Time)
 ```
+
+*Note: Bug filed because help is showing `when` and not `remote` as the value for the remote time.*
+
+## Known issues
+
+* This can break at the edges of daylight time changes.
+* Casting times (local and remote) will break when VPNs change your "location"
 
 ## Dependencies
 
@@ -47,3 +54,14 @@ Local 1:30:00 PM (MDT Mountain Time)
 * Build from Xcode (there's a custom build phase that installs to /usr/local/bin, so make sure you have write access)
 * Build from SPM: `swift build` in the top level directory. The built utility can be found in `.build/debug/now`. Run with `swift run`
 
+## Thanks
+
+*I just started this section so if you pitched in and I forgot to mention you, please let me know so I can update this!*
+
+Darren Ford (code review), Ryan Booker ([code review and improvements](https://github.com/ryanbooker/now/blob/master/Sources/now/main.swift), and not least Paul Hudson (for living in the wrong time zone)
+
+## Help Request
+
+I want to add tests that will work regardless of where the utility is built and tested. (I do all tests outside of Xcode right now.) 
+
+If you have suggestions or pointers, please let me know. Thanks!

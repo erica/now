@@ -3,7 +3,7 @@
 import Foundation
 
 extension Date {
-    
+        
     /// Returns a reminder date from a string formatted either hour-24:minute or hour:minute-meridian.
     ///
     /// This method constructs a date from an hour and minute representation.
@@ -15,6 +15,14 @@ extension Date {
     /// - Throws: `RuntimeError`s when unable to parse the input string.
     /// - Returns: A new date, initialized to the offset of the date either today or tomorrow.
     static func date(from string: String) throws -> Date {
+        
+        // Establish midnight.
+        // If offset is not possible, use unmodified date
+        let now = Date()
+        let year = Calendar.autoupdatingCurrent.component(.year, from: now)
+        let month = Calendar.autoupdatingCurrent.component(.month, from: now)
+        let day = Calendar.autoupdatingCurrent.component(.day, from: now)
+        let midnight = Calendar.autoupdatingCurrent.date(from: DateComponents(year: year, month: month, day: day)) ?? now
 
         // Establish partial date from string or throw. The string
         // provides hour and minute offsets from midnight.
@@ -41,7 +49,7 @@ extension Date {
         
         // Calculate the target date by starting with the time representing "now",
         // replacing the hour and minute components to represent a time for "today"
-        var targetDate = Date(timeIntervalSinceReferenceDate: 24 * 60 * 60)
+        var targetDate = midnight
         
         guard
             let newDateWithHour = NSCalendar.autoupdatingCurrent

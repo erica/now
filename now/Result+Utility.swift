@@ -8,10 +8,8 @@ public extension Result {
     init(_ data: Success?, _ error: Failure?) {
         precondition(!(data == nil && error == nil))
         switch (data, error) {
-        case (_, let failure?):
-            self = .failure(failure)
-        case (let success?, _):
-            self = .success(success)
+        case (_, let failure?): self = .failure(failure)
+        case (let success?, _): self = .success(success)
         default:
             fatalError("Cannot initialize `Result` without success or failure")
         }

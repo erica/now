@@ -7,26 +7,25 @@ import ArgumentParser
 struct Now: ParsableCommand {
     static var configuration = CommandConfiguration(
         discussion: """
-        Check the time at a given location, "now Sao Paolo Brazil".
+        Check the time at a given location, "now Sao Paolo Brazil". Locations
+        are diacritical and case insensitive.  Use postcodes, cities, states,
+        countries, even place names like "now Lincoln Memorial"
 
-        Locations are diacritical and case insensitive.  Use postcodes, cities,
-        states, countries, even place names like "now Lincoln Memorial"
-
-        Set a reference time with `at`: "now --at 5PM Bath UK"
-        Retrieve the reference time with `when`: "now --when 5PM Bath UK"
+        When it's this time here: "now --local 5PM Bath UK"
+        When it's that time there: "now --remote 5PM Bath UK"
         
         Valid time styles: 5PM, 5:30PM, 17:30, 1730. (No spaces.)
         """)
+
+    @Option(
+        name: [.short, .customLong("local"), .customLong("here"), .customLong("at"), .customShort("@")],
+        help: "When it's this local time")
+    var localTime: String?
     
     @Option(
-        name: [.customLong("time"), .long, .customShort("t"), .customShort("@")],
-        help: "At this local time")
-    var at: String?
-    
-    @Option(
-        name: [.long],
-        help: "When it's this time at that location")
-    var when: String?
+        name: [.short, .customLong("remote"),  .customLong("when"), .customLong("there")],
+        help: "When it's this remote time")
+    var remoteTime: String?
     
     @Argument(parsing: .remaining)
     var locationInfo: [String]
@@ -37,19 +36,12 @@ struct Now: ParsableCommand {
             else { throw CleanExit.helpRequest() }
         
         guard
-            at == nil || when == nil
+            localTime == nil || remoteTime == nil
             else { throw RuntimeError.atWhenOverlap }
 
         let hint = locationInfo.joined(separator: " ")
-        let date: Date
-        if case .some(let timeSpecifier) = (at ?? when) {
-            date = try Date.date(from: timeSpecifier)
-        } else {
-            date = Date()
-        }
-        try PlaceFinder.showTime(from: hint, date: date, castingTimeToLocal: when != nil)
+        try PlaceFinder.showTime(from: hint, at: localTime ?? remoteTime, castingTimeToLocal: remoteTime != nil)
     }    
 }
 
 Now.main()
-

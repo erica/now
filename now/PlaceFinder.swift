@@ -3,60 +3,77 @@
 import Foundation
 import CoreLocation
 
+typealias PlaceFindingResult = Result<[CLPlacemark], Error>
+
 /// A utility type to locate a place marker and print out a time with respect to that point.
 enum PlaceFinder {
     /// Retrieve a placemark from a descriptive string.
     /// - Parameter hint: A free-form location indicator, such as a city name, zip code, place of interest.
-    /// - Throws: geocoding errors from `CLGeocoder`
-    /// - Returns: A `CLPlacemark` matching the text hint
-    static func fetchPlaceMark(from hint: String) throws -> CLPlacemark {
-        var result: Result<[CLPlacemark], Error> = Result([], nil)
-        
+    /// - Returns: A `PlaceFindingResult` of the geocoded place hint
+    static func fetchPlaceMark(from hint: String) -> PlaceFindingResult {
+        var result: Result<[CLPlacemark], Error> = Result(nil, RuntimeError.locationFetchFailure)
         CLGeocoder().geocodeAddressString(hint) { placemarks, error in
             result = Result(placemarks, error)
             CFRunLoopStop(CFRunLoopGetCurrent())
         }
         CFRunLoopRun()
-        
-        let placemarks = try result.get()
-        return placemarks[0]
+        return result
     }
     
     /// Display a user-localized time (medium style) for a timezone described by freeform text
+    ///
+    /// This uses the current time to fetch the time zone abbreviation so there will be errors at the very
+    /// edges of daylight changes.
+    ///
     /// - Parameters:
     ///   - hint: A free-form location indicator, such as a city name, zip code, place of interest.
     ///   - date: An absolute date that will be adjusted to a timezone, localized to the user, and printed.
-    ///   - castLocal: Look up the remote time and cast it to the local zone
+    ///   - localCast: Look up the remote time and cast it to the local zone
     /// - Throws: A `RuntimeError` if the target timezone cannot be interpreted.
-    static func showTime(from hint: String, date: Date = Date(), castingTimeToLocal castLocal: Bool = false) throws {
-        let placemark = try fetchPlaceMark(from: hint)
+    static func showTime(from hint: String, at timeSpecifier: String?, castingTimeToLocal localCast: Bool = false) throws {
+        
+        let localTimeZone = Locale.autoupdatingCurrent.calendar.timeZone
+        let placemark = try fetchPlaceMark(from: hint).get()[0]
         guard
-            let timeZone = placemark.timeZone
+            let place = placemark.name,
+            let timeZone = placemark.timeZone,
+            let timeZoneAbbr = placemark.timeZone?.abbreviation(for: Date()),
+            let timeZoneName = placemark.timeZone?.localizedName(for: .generic, locale: .current)
             else { throw RuntimeError.timezoneFetchFailure }
         
-        var date = date
-        if castLocal {
-            let ourseconds = Locale.autoupdatingCurrent.calendar.timeZone.secondsFromGMT()
-            guard
-                let theirseconds = placemark.timeZone?.secondsFromGMT(),
-                let reverseDate = Calendar.autoupdatingCurrent.date(byAdding: .second, value: ourseconds - theirseconds, to: date)
-                else { throw RuntimeError.inexplicableFailure }
-            date = reverseDate
+        func printOutput(time: String, zone: String, zoneName: String) {
+            print(#"\#(localCast ? "Local" : "\(place)") \#(time) (\#(zone) \#(zoneName))"#)
         }
         
         let formatter = DateFormatter()
+        formatter.dateStyle = .none
         formatter.timeStyle = .medium
-        if !castLocal { formatter.timeZone = timeZone }
-        let stringDate = formatter.string(from: date)
+        formatter.timeZone = localCast ? localTimeZone : timeZone
         
-        let timezoneFormatter = DateFormatter()
-        timezoneFormatter.dateFormat = " (z vvvv)"
-        if !castLocal { timezoneFormatter.timeZone = timeZone }
+        guard let timeSpecifier = timeSpecifier else {
+            let time = formatter.string(from: Date())
+            printOutput(time: time, zone: timeZoneAbbr, zoneName: timeZoneName)
+            return
+        }
+        
+        let date = try Date.date(from: timeSpecifier)
 
-        if !castLocal, let name = placemark.name { print("\(name) ", terminator: "") }
-        else { print("Local ", terminator: "") }
+        guard localCast == true else {
+            let time = formatter.string(from: date)
+            printOutput(time: time, zone: timeZoneAbbr, zoneName: timeZoneName)
+            return
+        }
+
+        guard
+            let localAbbreviation = localTimeZone.abbreviation(),
+            let localName = localTimeZone.localizedName(for: .generic, locale: Locale.autoupdatingCurrent)
+            else { throw RuntimeError.inexplicableFailure }
         
-        print(stringDate, terminator: "")
-        print(timezoneFormatter.string(from: Date()))
+        let localSeconds = localTimeZone.secondsFromGMT()
+        let remoteSeconds = timeZone.secondsFromGMT()
+        guard let newDate = Calendar.autoupdatingCurrent.date(byAdding: .second, value: localSeconds - remoteSeconds, to: date)
+            else { throw RuntimeError.inexplicableFailure }
+        let time = formatter.string(from: newDate)
+        printOutput(time: time, zone: localAbbreviation, zoneName: localName)
     }
 }
