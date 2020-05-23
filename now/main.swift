@@ -7,15 +7,15 @@ import ArgumentParser
 struct Now: ParsableCommand {
     static var configuration = CommandConfiguration(
         discussion: """
-        Check the time at a given location, "now Sao Paolo".
+        Check the time at a given location, "now Sao Paolo Brazil".
 
         Locations are diacritical and case insensitive.  Use postcodes, cities,
         states, countries, even place names like "now Lincoln Memorial"
 
-        Set a reference time with `at`: "now --at 5P Bath UK"
-        Retrieve the reference time with `when`: "now --when 5P Bath UK"
+        Set a reference time with `at`: "now --at 5PM Bath UK"
+        Retrieve the reference time with `when`: "now --when 5PM Bath UK"
         
-        Valid time styles: 5PM, 5P, 5:30PM, 5:30P, 17:30, 1730. (No spaces.)
+        Valid time styles: 5PM, 5:30PM, 17:30, 1730. (No spaces.)
         """)
     
     @Option(

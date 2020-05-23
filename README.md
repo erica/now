@@ -9,15 +9,15 @@ I didn't intend to push this out but darn if it isn't useful.
 ```
 % now
 OVERVIEW:
-Check the time at a given location, "now Sao Paolo".
+Check the time at a given location, "now Sao Paolo Brazil".
 
 Locations are diacritical and case insensitive.  Use postcodes, cities,
 states, countries, even place names like "now Lincoln Memorial"
 
-Set a reference time with `at`: "now --at 5P Bath UK"
-Retrieve the reference time with `when`: "now --when 5P Bath UK"
+Set a reference time with `at`: "now --at 5PM Bath UK"
+Retrieve the reference time with `when`: "now --when 5PM Bath UK"
 
-Valid time styles: 5PM, 5P, 5:30PM, 5:30P, 17:30, 1730. (No spaces.)
+Valid time styles: 5PM, 5:30PM, 17:30, 1730. (No spaces.)
 
 USAGE: now [--time <time>] [--when <when>] [<location-info> ...]
 
@@ -30,11 +30,11 @@ OPTIONS:
   --when <when>           When it's this time at that location 
   -h, --help              Show help information.
 
-% now sao paolo
+% now sao paolo brazil
 São Paulo 10:09:43 PM (GMT-3 Brasilia Standard Time)
-% now --at 4:30P sao paolo
+% now --at 4:30PM sao paolo brazil
 São Paulo 7:30:00 PM (GMT-3 Brasilia Standard Time)
-% now --when 4:30P sao paolo
+% now --when 4:30PM sao paolo brazil
 Local 1:30:00 PM (MDT Mountain Time)
 ```
 
