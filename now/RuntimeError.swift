@@ -1,26 +1,23 @@
+//  Copyright © 2020 Erica Sadun. All rights reserved.
+
 import Foundation
 
-
 /// Errors encountered while running this command
-enum RuntimeError: String, Error {
+enum RuntimeError: String, Error, CustomStringConvertible {
+    var description: String { rawValue }
+
     /// Mutual exclusion between `at` and `when`
-    case atWhenOverlap = "Cannot specify both --at and --when. Pick one."
+    case localRemoteOverlap = "Cannot specify both remote and local times. Pick one."
     
     /// Time cannot be parsed
     case timeParseFailure = "Unable to parse hours and minutes from time string."
     
-    /// Hour cannot be set
-    case targetHourFailure = "Failed to set target hour."
-    
-    /// Minute cannot be set
-    case targetMinuteFailure = "Failed to set target minute."
+    /// Time components cannot be adjusted
+    case timeAdjustError = "Failed to adjust time."
     
     /// Location cannot be fetched
-    case locationFetchFailure = "Unable to fetch location information"
+    case locationFetchFailure = "Unable to fetch geocoded location information"
     
-    /// Timezone cannot be fetched
-    case timezoneFetchFailure = "Timezone not retrieved"
-    
-    /// This should never happen
-    case inexplicableFailure = "Inexplicable time zone conversion fail. Sorry."
+    /// Conversion fail
+    case timeConversionFailure = "Time zone conversion failed."
 }

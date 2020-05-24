@@ -2,6 +2,10 @@
 
 public extension Result {
     /// Initializes a `Result` from a completion handler's `(data?, error?)`.
+    ///
+    /// When both data and error are non-nil, `Result` first populates the
+    /// `.failure` member over the `success`.
+    ///
     /// - Parameters:
     ///   - data: the optional data returned via a completion handler
     ///   - error: the optional error returned via a completion handler

@@ -32,19 +32,23 @@ enum PlaceFinder {
     /// - Throws: A `RuntimeError` if the target timezone cannot be interpreted.
     static func showTime(from hint: String, at timeSpecifier: String?, castingTimeToLocal localCast: Bool = false) throws {
         
-        let localTimeZone = Locale.autoupdatingCurrent.calendar.timeZone
-        let placemark = try fetchPlaceMark(from: hint).get()[0]
+        let placemarks = try fetchPlaceMark(from: hint).get()
+        guard !placemarks.isEmpty
+            else { throw RuntimeError.locationFetchFailure }
+        let placemark = placemarks[0]
+        
         guard
             let place = placemark.name,
             let timeZone = placemark.timeZone,
             let timeZoneAbbr = placemark.timeZone?.abbreviation(for: Date()),
             let timeZoneName = placemark.timeZone?.localizedName(for: .generic, locale: .current)
-            else { throw RuntimeError.timezoneFetchFailure }
+            else { throw RuntimeError.timeConversionFailure }
         
         func printOutput(time: String, zone: String, zoneName: String) {
             print(#"\#(localCast ? "Local" : "\(place)") \#(time) (\#(zone) \#(zoneName))"#)
         }
         
+        let localTimeZone = Locale.autoupdatingCurrent.calendar.timeZone
         let formatter = DateFormatter()
         formatter.dateStyle = .none
         formatter.timeStyle = .medium
@@ -67,12 +71,13 @@ enum PlaceFinder {
         guard
             let localAbbreviation = localTimeZone.abbreviation(),
             let localName = localTimeZone.localizedName(for: .generic, locale: Locale.autoupdatingCurrent)
-            else { throw RuntimeError.inexplicableFailure }
+            else { throw RuntimeError.timeConversionFailure }
         
         let localSeconds = localTimeZone.secondsFromGMT()
         let remoteSeconds = timeZone.secondsFromGMT()
-        guard let newDate = Calendar.autoupdatingCurrent.date(byAdding: .second, value: localSeconds - remoteSeconds, to: date)
-            else { throw RuntimeError.inexplicableFailure }
+        let calendar = Calendar.autoupdatingCurrent
+        guard let newDate = calendar.date(byAdding: .second, value: localSeconds - remoteSeconds, to: date)
+            else { throw RuntimeError.timeConversionFailure }
         let time = formatter.string(from: newDate)
         printOutput(time: time, zone: localAbbreviation, zoneName: localName)
     }

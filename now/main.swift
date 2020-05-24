@@ -37,7 +37,7 @@ struct Now: ParsableCommand {
         
         guard
             localTime == nil || remoteTime == nil
-            else { throw RuntimeError.atWhenOverlap }
+            else { throw RuntimeError.localRemoteOverlap }
 
         let hint = locationInfo.joined(separator: " ")
         try PlaceFinder.showTime(from: hint, at: localTime ?? remoteTime, castingTimeToLocal: remoteTime != nil)

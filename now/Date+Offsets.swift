@@ -15,17 +15,7 @@ extension Date {
     /// - Throws: `RuntimeError`s when unable to parse the input string.
     /// - Returns: A new date, initialized to the offset of the date either today or tomorrow.
     static func date(from string: String) throws -> Date {
-        
-        // Establish midnight.
-        // If offset is not possible, use unmodified date
-        let now = Date()
-        let year = Calendar.autoupdatingCurrent.component(.year, from: now)
-        let month = Calendar.autoupdatingCurrent.component(.month, from: now)
-        let day = Calendar.autoupdatingCurrent.component(.day, from: now)
-        let midnight = Calendar.autoupdatingCurrent.date(from: DateComponents(year: year, month: month, day: day)) ?? now
-
-        // Establish partial date from string or throw. The string
-        // provides hour and minute offsets from midnight.
+        // Parse date in preferred order
         let dateFormatter = DateFormatter()
         var date: Date?
         for format in ["h:ma", "ha", "H:m", "HH", "Hm", "HHmm"] {
@@ -36,33 +26,25 @@ extension Date {
             }
         }
         
+        // Ensure date was constructed
         guard
             let componentDate = date
             else { throw RuntimeError.timeParseFailure }
+                
+        // Construct YMD components from now
+        let calendar = Calendar.autoupdatingCurrent
+        let now = Date()
+        let year = calendar.component(.year, from: now)
+        let month = calendar.component(.month, from: now)
+        let day = calendar.component(.day, from: now)
         
-        let components = NSCalendar.autoupdatingCurrent
-            .dateComponents([.hour, .minute], from: componentDate)
-        guard
-            let hourComponent = components.hour,
-            let minuteComponent = components.minute
-            else { throw RuntimeError.timeParseFailure }
-        
-        // Calculate the target date by starting with the time representing "now",
-        // replacing the hour and minute components to represent a time for "today"
-        var targetDate = midnight
-        
-        guard
-            let newDateWithHour = NSCalendar.autoupdatingCurrent
-                .date(bySetting: .hour, value: hourComponent, of: targetDate)
-            else { throw RuntimeError.targetHourFailure }
-        targetDate = newDateWithHour
-        
-        guard
-            let newDateWithMinute = NSCalendar.autoupdatingCurrent
-                .date(bySetting: .minute, value: minuteComponent, of: targetDate)
-            else { throw RuntimeError.targetMinuteFailure }
-        targetDate = newDateWithMinute
-        
-        return targetDate
+        // Construct HM components from constructed date
+        let hour = calendar.component(.hour, from: componentDate)
+        let minute = calendar.component(.minute, from: componentDate)
+
+        // Combine
+        guard let adjustedDate = calendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour, minute: minute))
+            else { throw RuntimeError.timeAdjustError }
+        return adjustedDate
     }
 }
