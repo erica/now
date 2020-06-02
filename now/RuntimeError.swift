@@ -20,4 +20,7 @@ enum RuntimeError: String, Error, CustomStringConvertible {
     
     /// Conversion fail
     case timeConversionFailure = "Time zone conversion failed."
+    
+    /// JSON fail
+    case jsonError = "Unable to convert data to JSON"
 }
