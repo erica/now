@@ -15,17 +15,24 @@ struct Now: ParsableCommand {
         When it's that time there: "now --remote 5PM Bath UK"
         
         Valid time styles: 5PM, 5:30PM, 17:30, 1730. (No spaces.)
-        """)
+        """,
+        version: "1.1"
+    )
 
     @Option(
         name: [.short, .customLong("local"), .customLong("here"), .customLong("at"), .customShort("@")],
-        help: "When it's this local time")
+        help: "When it's this local time.")
     var localTime: String?
     
     @Option(
         name: [.short, .customLong("remote"),  .customLong("when"), .customLong("there")],
-        help: "When it's this remote time")
+        help: "When it's this remote time.")
     var remoteTime: String?
+    
+    @Flag(
+        name: .shortAndLong,
+        help: "Output JSON results.")
+    var json: Bool
     
     @Argument(parsing: .remaining)
     var locationInfo: [String]
@@ -40,7 +47,7 @@ struct Now: ParsableCommand {
             else { throw RuntimeError.localRemoteOverlap }
 
         let hint = locationInfo.joined(separator: " ")
-        try PlaceFinder.showTime(from: hint, at: localTime ?? remoteTime, castingTimeToLocal: remoteTime != nil)
+        try PlaceFinder.showTime(from: hint, at: localTime ?? remoteTime, castingTimeToLocal: remoteTime != nil, outputJSON: json)
     }    
 }
 
