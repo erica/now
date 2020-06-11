@@ -45,6 +45,12 @@ Local 1:00:00 PM (GMT-3 Brasilia Standard Time)
 * This can break at the edges of daylight time changes.
 * Casting times (local and remote) will break when VPNs change your "location"
 
+## Installation
+
+* Install [homebrew](https://brew.sh).
+* Install [mint](https://github.com/yonaskolb/Mint) with homebrew (`brew install mint`).
+* From command line: `mint install erica/now`
+
 ## Dependencies
 
 * [Swift-Argument-Parser](https://github.com/apple/Swift-Argument-Parser)
