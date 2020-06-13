@@ -1,5 +1,9 @@
 # Change Log
 
+## V 1.2
+
+* Rolled back Swift tools from 5.2 to 5.1 to support Mojave
+
 ## V 1.1
 
 * Produce JSON output on demand.
