@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct LocatedTime: Codable {
+struct LocatedTime: Encodable {
     let version: String = "1"
     let place: String
     let time: String

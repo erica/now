@@ -17,14 +17,13 @@ enum PlaceFinder {
     /// Retrieve a placemark from a descriptive string.
     /// - Parameter hint: A free-form location indicator, such as a city name, zip code, place of interest.
     /// - Returns: A `PlaceFindingResult` of the geocoded place hint
-    static func fetchPlaceMark(from hint: String) -> PlaceFindingResult {
-        var result: Result<[CLPlacemark], Error> = Result(nil, RuntimeError.locationFetchFailure)
-        CLGeocoder().geocodeAddressString(hint) { placemarks, error in
-            result = Result(placemarks, error)
-            CFRunLoopStop(CFRunLoopGetCurrent())
-        }
-        CFRunLoopRun()
-        return result
+    static func fetchPlaceMark(from hint: String) async -> PlaceFindingResult {
+		do {
+			let placemarks = try await CLGeocoder().geocodeAddressString(hint)
+			return .success(placemarks)
+		} catch {
+			return .failure(error)
+		}
     }
     
     /// Display a user-localized time (medium style) for a timezone described by freeform text
@@ -37,10 +36,10 @@ enum PlaceFinder {
     ///   - date: An absolute date that will be adjusted to a timezone, localized to the user, and printed.
     ///   - localCast: Look up the remote time and cast it to the local zone
     /// - Throws: A `RuntimeError` if the target timezone cannot be interpreted.
-    static func showTime(from hint: String, at timeSpecifier: String?, castingTimeToLocal localCast: Bool = false, outputJSON: Bool) throws {
+    static func showTime(from hint: String, at timeSpecifier: String?, castingTimeToLocal localCast: Bool = false, outputJSON: Bool) async throws {
         
         // Fetch placemark
-        let placemarks = try fetchPlaceMark(from: hint).get()
+        let placemarks = try await fetchPlaceMark(from: hint).get()
         guard !placemarks.isEmpty
             else { throw RuntimeError.locationFetchFailure }
         let placemark = placemarks[0]

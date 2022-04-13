@@ -4,7 +4,8 @@ import Foundation
 import ArgumentParser
 
 /// A command that checks the time at remote locations
-struct Now: ParsableCommand {
+@main
+struct Now: AsyncParsableCommand {
     static var configuration = CommandConfiguration(
         discussion: """
         Check the time at a given location, "now Sao Paolo Brazil". Locations
@@ -32,12 +33,12 @@ struct Now: ParsableCommand {
     @Flag(
         name: .shortAndLong,
         help: "Output JSON results.")
-    var json: Bool
+    var json: Bool = false
     
     @Argument(parsing: .remaining)
     var locationInfo: [String]
 
-    func run() throws {
+    func run() async throws {
         guard
             CommandLine.argc > 1
             else { throw CleanExit.helpRequest() }
@@ -47,8 +48,6 @@ struct Now: ParsableCommand {
             else { throw RuntimeError.localRemoteOverlap }
 
         let hint = locationInfo.joined(separator: " ")
-        try PlaceFinder.showTime(from: hint, at: localTime ?? remoteTime, castingTimeToLocal: remoteTime != nil, outputJSON: json)
+        try await PlaceFinder.showTime(from: hint, at: localTime ?? remoteTime, castingTimeToLocal: remoteTime != nil, outputJSON: json)
     }    
 }
-
-Now.main()

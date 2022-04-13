@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.5
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "now",
     platforms: [
-      .macOS(.v10_12)
+      .macOS(.v10_15)
     ],
     products: [
         .executable(
@@ -16,10 +16,10 @@ let package = Package(
     dependencies: [
       .package(
         url:"https://github.com/apple/swift-argument-parser",
-        .exact("0.0.6")),
+		.upToNextMajor(from: "1.1.2")),
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "now",
             dependencies: [.product(name: "ArgumentParser", package: "swift-argument-parser")],
             path: "now/"
