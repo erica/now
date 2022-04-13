@@ -18,12 +18,12 @@ enum PlaceFinder {
     /// - Parameter hint: A free-form location indicator, such as a city name, zip code, place of interest.
     /// - Returns: A `PlaceFindingResult` of the geocoded place hint
     static func fetchPlaceMark(from hint: String) async -> PlaceFindingResult {
-		do {
-			let placemarks = try await CLGeocoder().geocodeAddressString(hint)
-			return .success(placemarks)
-		} catch {
-			return .failure(error)
-		}
+        do {
+            let placemarks = try await CLGeocoder().geocodeAddressString(hint)
+            return .success(placemarks)
+        } catch {
+            return .failure(error)
+        }
     }
     
     /// Display a user-localized time (medium style) for a timezone described by freeform text
