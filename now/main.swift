@@ -32,16 +32,12 @@ struct Now: ParsableCommand {
     @Flag(
         name: .shortAndLong,
         help: "Output JSON results.")
-    var json: Bool
+    var json: Bool = false
     
     @Argument(parsing: .remaining)
     var locationInfo: [String]
 
     func run() throws {
-        guard
-            CommandLine.argc > 1
-            else { throw CleanExit.helpRequest() }
-        
         guard
             localTime == nil || remoteTime == nil
             else { throw RuntimeError.localRemoteOverlap }
