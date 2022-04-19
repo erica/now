@@ -1,8 +1,12 @@
 # Change Log
 
+## V 1.3
+
+* Updated Swift Argument Parser.
+
 ## V 1.2
 
-* Rolled back Swift tools from 5.2 to 5.1 to support Mojave
+* Rolled back Swift tools from 5.2 to 5.1 to support Mojave.
 
 ## V 1.1
 
