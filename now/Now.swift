@@ -17,7 +17,7 @@ struct Now: AsyncParsableCommand {
         
         Valid time styles: 5PM, 5:30PM, 17:30, 1730. (No spaces.)
         """,
-        version: "1.1"
+        version: "1.3"
     )
 
     @Option(
