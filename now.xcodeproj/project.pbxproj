@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8E0CC35324734428008B5432 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0CC35224734428008B5432 /* main.swift */; };
 		8E0CC3592473443C008B5432 /* now in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E0CC34F24734428008B5432 /* now */; };
 		8E0CC35E2473460C008B5432 /* RuntimeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0CC35D2473460C008B5432 /* RuntimeError.swift */; };
 		8E0CC36024734614008B5432 /* Date+Offsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0CC35F24734614008B5432 /* Date+Offsets.swift */; };
@@ -15,6 +14,7 @@
 		8E10B4A92478326700597641 /* Result+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E10B4A82478326700597641 /* Result+Utility.swift */; };
 		8E3D88672479A4B700DB2C06 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 8E3D88662479A4B700DB2C06 /* ArgumentParser */; };
 		8E8795962486A8DC0029766B /* LocatedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8795952486A8DC0029766B /* LocatedTime.swift */; };
+		B38D18FA280706700089F0CE /* Now.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38D18F9280706700089F0CE /* Now.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,12 +32,12 @@
 
 /* Begin PBXFileReference section */
 		8E0CC34F24734428008B5432 /* now */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = now; sourceTree = BUILT_PRODUCTS_DIR; };
-		8E0CC35224734428008B5432 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8E0CC35D2473460C008B5432 /* RuntimeError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RuntimeError.swift; sourceTree = "<group>"; };
 		8E0CC35F24734614008B5432 /* Date+Offsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Offsets.swift"; sourceTree = "<group>"; };
 		8E0CC36124734697008B5432 /* PlaceFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFinder.swift; sourceTree = "<group>"; };
 		8E10B4A82478326700597641 /* Result+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Utility.swift"; sourceTree = "<group>"; };
 		8E8795952486A8DC0029766B /* LocatedTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocatedTime.swift; sourceTree = "<group>"; };
+		B38D18F9280706700089F0CE /* Now.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Now.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +71,7 @@
 		8E0CC35124734428008B5432 /* now */ = {
 			isa = PBXGroup;
 			children = (
-				8E0CC35224734428008B5432 /* main.swift */,
+				B38D18F9280706700089F0CE /* Now.swift */,
 				8E0CC35F24734614008B5432 /* Date+Offsets.swift */,
 				8E8795952486A8DC0029766B /* LocatedTime.swift */,
 				8E0CC36124734697008B5432 /* PlaceFinder.swift */,
@@ -145,11 +145,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E0CC35324734428008B5432 /* main.swift in Sources */,
 				8E8795962486A8DC0029766B /* LocatedTime.swift in Sources */,
 				8E0CC36024734614008B5432 /* Date+Offsets.swift in Sources */,
 				8E10B4A92478326700597641 /* Result+Utility.swift in Sources */,
 				8E0CC36224734697008B5432 /* PlaceFinder.swift in Sources */,
+				B38D18FA280706700089F0CE /* Now.swift in Sources */,
 				8E0CC35E2473460C008B5432 /* RuntimeError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -322,8 +322,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-argument-parser";
 			requirement = {
-				kind = exactVersion;
-				version = 0.0.6;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
