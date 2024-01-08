@@ -19,7 +19,7 @@ enum PlaceFinder {
     /// - Returns: A `PlaceFindingResult` of the geocoded place hint
     static func fetchPlaceMark(from hint: String) -> PlaceFindingResult {
         var result: Result<[CLPlacemark], Error> = Result(nil, RuntimeError.locationFetchFailure)
-        CLGeocoder().geocodeAddressString(hint) { placemarks, error in
+        CLGeocoder().geocodeAddressString(hint, in: nil) { placemarks, error in
             result = Result(placemarks, error)
             CFRunLoopStop(CFRunLoopGetCurrent())
         }

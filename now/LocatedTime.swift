@@ -3,7 +3,7 @@
 import Foundation
 
 struct LocatedTime: Codable {
-    let version: String = "1"
+    var version: String = "1"
     let place: String
     let time: String
     let timeZone: String
